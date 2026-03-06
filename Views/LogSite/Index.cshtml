@@ -1,0 +1,23 @@
+﻿@using WebAppAnapaDeti.Models.Entities
+@using WebAppAnapaDeti.Models._ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebAppAnapaDeti.Models._ViewModels.LogSiteIndexViewModel
+@{
+    ViewBag.Title = ViewBag.Heading;
+}
+
+@if (Model.LogSites.Count > 0)
+{
+    foreach (LogSiteViewModel logsite in Model.LogSites)
+    {
+        <div>
+        <span> @logsite.Id - @logsite.LogTypeId</span>
+        <br />
+        <span> @logsite.TimeMsk</span>
+        <br />
+        <span> @logsite.Message</span>
+    </div>
+    }
+}
+
+<script defer src="~/js/logsite/index.js" asp-append-version="true"></script>
