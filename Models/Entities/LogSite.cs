@@ -8,11 +8,11 @@ namespace WebAppAnapaDeti.Models.Entities;
 public class LogSite
 {
     [Key, Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     [Column("logtypeid")]
     public int LogTypeId { get; set; }
     [Column("timemsk")]
-    public DateTime TimeMsk { get; set; } = C.MoscowDateTime;
+    public DateTime TimeMsk { get; set; } = DateTime.Now.ToUniversalTime(); //C.MoscowDateTime;
     [Column("message")]
     public required string Message { get; set; }
 }

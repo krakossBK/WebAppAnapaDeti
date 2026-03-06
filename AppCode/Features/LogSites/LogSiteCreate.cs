@@ -9,19 +9,17 @@ namespace WebAppAnapaDeti.AppCode.Features.LogSites
     public abstract class LogSiteCreate
     {
         public record Command(int LogTypeId,
-                         string Message) : IRequest<int>;
+                              string Message) : IRequest<string>;
 
         public class Handler(
             IAppDbContext appContext,
             ILogger<Handler> logger
-            ) : IRequestHandler<Command, int>
+            ) : IRequestHandler<Command, string>
         {
-            public async Task<int> Handle(Command request, CancellationToken ct)
+            public async Task<string> Handle(Command request, CancellationToken ct)
             {
-
                 try
                 {
-
                     LogSite logSite = new()
                     {
                         LogTypeId = request.LogTypeId,
@@ -29,12 +27,11 @@ namespace WebAppAnapaDeti.AppCode.Features.LogSites
                     };
                     await Task.Delay(100, ct);
                     return appContext.AddLogSite(logSite);// Добавление данных logSite
-
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex.Message);
-                    return 0;
+                    return "krakoss";
                 }
             }
         }

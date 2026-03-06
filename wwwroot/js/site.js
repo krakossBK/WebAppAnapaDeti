@@ -1,6 +1,7 @@
 ﻿'use strict';
 const hrefOrigin = window.location.origin; //  javascript.info/url
-
+const log = console.log; // Мы часто будем выводить данные в консоль, поэтому создадим такую "утилиту": habr.com/ru/companies/macloud/articles/557422/
+const logEr = console.error;
 
 let burger = document.getElementById("burger");
 let overlay = document.getElementById("listmenu");

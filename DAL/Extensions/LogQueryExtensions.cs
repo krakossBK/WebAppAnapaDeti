@@ -23,8 +23,8 @@ public static class LogQueryExtensions
     /// <param name="context">IAppDbContext context</param>
     /// <param name="logSite">LogSite logSite</param>
     /// <returns>Id созданного записи</returns>
-    public static int AddLogSite(this IAppDbContext context, LogSite logSite)
-        => context.Store(logSite).Id;
+    public static string AddLogSite(this IAppDbContext context, LogSite logSite)
+        =>  context.Store(logSite).Id.ToString().ToUpper();
 
     /// <summary>
     /// Получить данные записи по его Id
@@ -32,9 +32,9 @@ public static class LogQueryExtensions
     /// <param name="id">ID записи</param>
     /// <returns> LOG </returns>
     /// <exception cref="Exception"></exception>
-    public static LogSiteViewModel GetLogSite(this IAppDbContext context, int id) 
+    public static LogSiteViewModel GetLogSite(this IAppDbContext context, string id) 
         => context.Query<LogSite>()
-                  .FirstOrDefault(f => f.Id == id)
+                  .FirstOrDefault(f => f.Id.Equals(Guid.Parse(id)))
                   .Adapt<LogSiteViewModel>();
 
     /// <summary>
@@ -43,9 +43,9 @@ public static class LogQueryExtensions
     /// <param name="context">IAppDbContext context</param>
     /// <param name="id">ID Log</param>
     /// <returns>true OR false</returns>
-    public static bool DeleteLogSite(this IAppDbContext context, int id)
+    public static bool DeleteLogSite(this IAppDbContext context, string id)
         => context.Query<LogSite>()
-                  .Where(w => w.Id == id)
+                  .Where(w => w.Id.Equals(Guid.Parse(id)))
                   .ExecuteDelete() > 0;
 
 }

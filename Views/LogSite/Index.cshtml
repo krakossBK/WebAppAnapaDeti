@@ -6,18 +6,38 @@
     ViewBag.Title = ViewBag.Heading;
 }
 
-@if (Model.LogSites.Count > 0)
-{
-    foreach (LogSiteViewModel logsite in Model.LogSites)
+<div style="position: fixed; top: 30%; left:40px;">
+    @if (Model.LogSites.Count > 0)
     {
-        <div>
-        <span> @logsite.Id - @logsite.LogTypeId</span>
-        <br />
-        <span> @logsite.TimeMsk</span>
-        <br />
-        <span> @logsite.Message</span>
-    </div>
+        foreach (LogSiteViewModel logsite in Model.LogSites)
+        {
+            <span> @logsite.Id - @logsite.LogTypeId</span>
+            <br />
+            <span> @logsite.TimeMsk</span>
+            <br />
+            <span> @logsite.Message</span>
+            <br />
+        }
     }
-}
+</div>
+<div style="position: fixed; top: 10%; left:45px;">
+    <button commandfor="my-dialog" command="show-modal">
+        Add log messsage
+    </button>
+    <dialog id="my-dialog" style="position: fixed; top: 30%; left:40px;">
+        <div style="display: flex; gap: 10px">
+            <input id="type-log" type="number" />
+            <br />
+            <input id="message-log" type="text" />
+
+            <button commandfor="my-dialog" command="close" data-answer="ok">
+                OK
+            </button>
+            <button commandfor="my-dialog" command="close" data-answer="no">
+                No
+            </button>
+        </div>
+    </dialog> 
+</div>
 
 <script defer src="~/js/logsite/index.js" asp-append-version="true"></script>

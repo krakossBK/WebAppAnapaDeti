@@ -25,7 +25,7 @@ namespace WebAppAnapaDeti.AppCode
         /// </summary>
         /// <param name="id">id записи</param>
         /// <returns>LogViewModel</returns>
-        public async Task<LogSiteViewModel> GetLogVM(int id)
+        public async Task<LogSiteViewModel> GetLogVM(string id)
             => await Task.Run(() => _appContext.GetLogSite(id));
 
 
@@ -35,7 +35,7 @@ namespace WebAppAnapaDeti.AppCode
         /// </summary>
         /// <param name="id">id записи</param>
         /// <returns>true OR false</returns>
-        public async Task<bool> DeleteLog(int id)
+        public async Task<bool> DeleteLog(string id)
             => await Task.Run(() => _appContext.DeleteLogSite(id));
     }
 }

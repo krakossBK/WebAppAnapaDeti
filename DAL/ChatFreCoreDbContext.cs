@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace WebAppAnapaDeti.DAL;
 
@@ -11,7 +12,23 @@ public partial class ChatFreCoreDbContext(DbContextOptions<ChatFreCoreDbContext>
     {
         //  stackoverflow.com/questions/65990565/how-to-prevent-ef-core-5-from-creating-a-savepoint-when-saving
         //optionsBuilder.ConfigureWarnings(w => w.Ignore(SqlServerEventId.SavepointsDisabledBecauseOfMARS));
+        /*
+        var dbConfig = Configurer.Config.MessageDbConfig;
+        optionsBuilder.UseNpgsql(new NpgsqlConnectionStringBuilder
+        {
+            Database = dbConfig.DbName,
+            Username = dbConfig.Username,
+            Password = dbConfig.Password,
+            Host = dbConfig.Host,
+            Port = dbConfig.Port,
+            Pooling = dbConfig.Pooling
+        }.ConnectionString,
+         optionsBuilder => optionsBuilder.SetPostgresVersion(Version.Parse("14.4")));
+
+        base.OnConfiguring(optionsBuilder);
+        */
     }
+
 
     /// <summary>
     /// Создать новую запись

@@ -58,11 +58,10 @@ services
                 .MigrationsAssembly(typeof(Program).Assembly))
             //todo fixme
             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
-            //.UseLazyLoadingProxies()
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging()
-    )
+    )   
     .AddScoped<IAppDbContext, ChatFreCoreDbContext>();
 
 services.AddMediatR(config =>

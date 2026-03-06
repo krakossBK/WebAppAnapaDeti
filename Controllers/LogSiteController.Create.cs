@@ -6,7 +6,7 @@ namespace WebAppAnapaDeti.Controllers;
 public partial class LogSiteController
 {
     [HttpPost("/create-log")]
-    public async Task<int> CreateLogSite(LogSiteCreate.Command command)
+    public async Task<string> CreateLogSite(LogSiteCreate.Command command)
     {
         try
         {
@@ -14,8 +14,8 @@ public partial class LogSiteController
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "async Task<int> CreateLogSite");
-            return 0;
+            _logger.LogError(ex, "async Task<string> CreateLogSite");
+            return "krakoss";
         }
     }
 }
