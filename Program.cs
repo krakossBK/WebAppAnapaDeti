@@ -1,14 +1,16 @@
-﻿using WebAppAnapaDeti.AppCode;
-using WebAppAnapaDeti.DAL;
-using WebAppAnapaDeti.Infrastructure.Behaviors;
-using Mapster;
-using MapsterMapper;
+﻿using Mapster;
 using Microsoft.AspNetCore.Authentication.Cookies;
-//using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using WebAppAnapaDeti;
+using WebAppAnapaDeti.AppCode;
+using WebAppAnapaDeti.DAL;
+using WebAppAnapaDeti.Infrastructure.Behaviors;
+//using MailKit;
+//using MapsterMapper;
+//using Microsoft.AspNetCore.Razor.TagHelpers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -52,7 +54,7 @@ services.AddOutputCache();
 // добавление кэширования
 
 services
-    .AddDbContext<ChatFreCoreDbContext>(
+    .AddDbContext<WebAppAnapaDetiDbContext>(
         options => options.UseNpgsql(builder.Configuration.GetConnectionString("connStr"), c => c
                 .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
                 .MigrationsAssembly(typeof(Program).Assembly))
@@ -62,7 +64,7 @@ services
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging()
     )   
-    .AddScoped<IAppDbContext, ChatFreCoreDbContext>();
+    .AddScoped<IAppDbContext, WebAppAnapaDetiDbContext>();
 
 services.AddMediatR(config =>
 {
@@ -77,8 +79,17 @@ TypeAdapterConfig.GlobalSettings.Scan(AppDomain.CurrentDomain.GetAssemblies());
 services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 
 services.AddScoped<LogSiteHelper>();
+services.AddScoped<SecurityHelper>();
+services.AddScoped<UserHelper>();
+services.Configure<LocalStoreConfig>(c => c.BasePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DContent"));
+services.AddScoped<LocalStoreService>();
 
 
+// получили данные из файла - appSettings.json
+services.AddOptions<AppSettings>()
+    .BindConfiguration("appSettings")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 services.AddControllers();
 

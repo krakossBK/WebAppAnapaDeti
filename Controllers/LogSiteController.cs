@@ -1,10 +1,7 @@
-﻿using WebAppAnapaDeti.AppCode;
-using WebAppAnapaDeti.AppCode.Features.LogSites;
-using WebAppAnapaDeti.Models._ViewModels;
-using WebAppAnapaDeti.Models.Entities;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+using WebAppAnapaDeti.AppCode;
+using WebAppAnapaDeti.Models._ViewModels;
 
 namespace WebAppAnapaDeti.Controllers;
 

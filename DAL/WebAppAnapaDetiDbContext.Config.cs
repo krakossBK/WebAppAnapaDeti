@@ -2,7 +2,7 @@
 
 namespace WebAppAnapaDeti.DAL;
 
-public partial class ChatFreCoreDbContext
+public partial class WebAppAnapaDetiDbContext
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

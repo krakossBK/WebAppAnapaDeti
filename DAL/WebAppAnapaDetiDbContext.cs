@@ -3,10 +3,10 @@ using Npgsql;
 
 namespace WebAppAnapaDeti.DAL;
 
-public partial class ChatFreCoreDbContext(DbContextOptions<ChatFreCoreDbContext> options) : DbContext(options), IAppDbContext
+public partial class WebAppAnapaDetiDbContext(DbContextOptions<WebAppAnapaDetiDbContext> options) : DbContext(options), IAppDbContext
 {
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder) =>
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChatFreCoreDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebAppAnapaDetiDbContext).Assembly);
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

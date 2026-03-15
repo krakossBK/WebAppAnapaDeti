@@ -1,0 +1,19 @@
+﻿@model WebAppAnapaDeti.Models._ViewModels.UserLoginConfirmByLinkFromEmailViewModel
+@{
+    ViewBag.Title = "Подтверждение входа";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model != null)
+{
+    <div style="text-align:center">
+        <h2>Ошибка при подтверждении входа</h2>
+        <h4>@Model.ErrorMessage</h4>
+    </div>
+}
+else
+{
+    <div style="text-align:center">
+        <h4>Вход выполнен успешно. Выполняется переход в личный кабинет</h4>
+    </div>
+}

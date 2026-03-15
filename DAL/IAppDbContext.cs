@@ -55,4 +55,6 @@ public interface IAppDbContext
 
     DbSet<LogSite> LogSites { get; }
 
+    DbSet<User> Users { get;}
+
 }

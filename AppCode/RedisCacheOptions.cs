@@ -1,7 +1,6 @@
-﻿namespace WebAppAnapaDeti.AppCode
+﻿namespace WebAppAnapaDeti.AppCode;
+
+public class RedisCacheOptions
 {
-    public class RedisCacheOptions
-    {
-        public required string Configuration { get; set; }
-    }
+    public required string Configuration { get; set; }
 }

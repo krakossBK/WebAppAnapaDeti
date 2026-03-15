@@ -1,7 +1,6 @@
-﻿namespace WebAppAnapaDeti.Models._ViewModels
+﻿namespace WebAppAnapaDeti.Models._ViewModels;
+
+public class LogSiteIndexViewModel
 {
-    public class LogSiteIndexViewModel
-    {
-       public required List<LogSiteViewModel> LogSites { get; set; }
-    }
+   public required List<LogSiteViewModel> LogSites { get; set; }
 }
