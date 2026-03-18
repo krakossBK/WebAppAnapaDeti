@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAppAnapaDeti.AppCode;
 using WebAppAnapaDeti.AppCode.Features.Mail;
 using WebAppAnapaDeti.DAL.Extensions;
-using WebAppAnapaDeti.Models._ViewModels;
+using WebAppAnapaDeti.Models._ViewModels.User;
 using WebAppAnapaDeti.Models.Entities;
 using WebAppAnapaDeti.Models.Enums;
 
@@ -14,29 +14,20 @@ public partial class UserController
 {
     #region LOGIN Вход в систему
 
-    //[HttpGet(C.LoginUrl)]
-    //[AllowAnonymous]
-    //public IActionResult Login()
-    //{
-    //    ViewBag.L.HideHead = true; // так же надо будет настроить и Footer
-    //    ViewBag.L.HideFooter = true;
-    //    var viewModel = new UserLoginViewModel();
-    //    ViewBag.Heading = "Вход";
-
-    //    #region Хлебные крошки
-
-    //    var breadCrumbs = new List<BreadCrumbLink>
-    //    {
-    //        new()
-    //            { Text = "Личный кабинет", Url = C.MyProfileUrl, Title = "Перейти в личный кабинет" },
-    //        new() { Text = "Вход", EndPoint = true }
-    //    };
-    //    ViewBag.BreadCrumbs = breadCrumbs;
-
-    //    #endregion
-
-    //    return View(viewModel);
-    //}
+    [HttpGet(C.LoginUrl)]
+    [AllowAnonymous]
+    public IActionResult Login()
+    {
+        //ViewBag.L.HideHead = true; // так же надо будет настроить и Footer
+        //ViewBag.L.HideFooter = true;
+        var viewModel = new UserLoginViewModel()
+        {
+            Email = "",
+            ErrorMessage = ""
+        };
+        ViewBag.Heading = "Вход";
+        return View(viewModel);
+    }
 
     //[AllowAnonymous]
     //[HttpPost(C.LoginUrl)]
@@ -147,7 +138,7 @@ public partial class UserController
     /// </summary>
     /// <param name="code">code</param>
     /// <returns></returns>
-    [HttpGet("/confirm-email")]
+    [HttpGet(C.ConfirmEmailUrl)]
     [AllowAnonymous]
     public async Task<IActionResult> LoginConfirmByLinkFromEmail(string code)
     {
@@ -158,18 +149,16 @@ public partial class UserController
         {
             ErrorMessage = "Общая ошибка сайта. Админ уже работает над её устранением."
         };
-
-        if (string.IsNullOrEmpty(code))
+        bool isValid = Guid.TryParse(code, out _);
+        if (!isValid)
             return View(viewModel.ErrorMessage = "Передан неверный токен");
 
         var user = _appContext.GetUserByToken(code);
-
         if (user == null)
             return View(viewModel.ErrorMessage = "Не найден пользователь");
 
         if (!user.EmailConfirmed)
         {
-           
             _appContext.UpdateUserEmailConfirmed(user.Id, true, true); // запишем в БД данные о событии успешного подтверждения Email адреса и включим подписку на емайл
             _appContext.UpdateUserModerateResult(user.Id, (int)ModerateResults.Accepted); // запишем в БД новый статус у Usera           
             _appContext.UpdateVerificationCode(user.Id, Guid.NewGuid()); // запишем в БД новый VerificationCode у Usera 

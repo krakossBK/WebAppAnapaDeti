@@ -8,9 +8,6 @@ using WebAppAnapaDeti;
 using WebAppAnapaDeti.AppCode;
 using WebAppAnapaDeti.DAL;
 using WebAppAnapaDeti.Infrastructure.Behaviors;
-//using MailKit;
-//using MapsterMapper;
-//using Microsoft.AspNetCore.Razor.TagHelpers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;

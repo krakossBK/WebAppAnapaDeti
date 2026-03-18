@@ -19,120 +19,37 @@
             </ul>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <article>
             @RenderBody()
-        </main>
-    </div>
+    </article>
     <section id="listmenu">
         <ul class="level-1">
             <li>
-                <h3>Описание</h3>
+                @* <h3>Описание</h3> *@
                 <ul class="level-2">
                     <li>
-                        <p>Анапа</p>
+                        <p>Детский оздоровительный лагерь</p>
                         <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
+                            <li>Анапа</li>
+                            <li>Витязево</li>
+                            <li>Сукко</li>
+                            <li>Большой Утриш</li>
                         </ul>
                     </li>
                     <li>
-                        <p>Витязево</p>
+                        <p>Личный кабинет</p>
                         <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
+                            <li> <a asp-controller="User" asp-action="Login">Войти</a></li>
+                            <li><a asp-controller="User" asp-action="Signup">Регистрация</a></li>
                         </ul>
                     </li>
                     <li>
-                        <p>Сукко</p>
+                        <p>О нас</p>
                         <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
+                            <li><a asp-controller="Home" asp-action="Contacts">Контакты</a></li>
+                            <li>Отзывы</li>
                         </ul>
                     </li>
-                    <li>
-                        <p>Большой Утриш</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                            <li>Дельфинарий</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>Описание</h3>
-                <ul class="level-2">
-                    <li>
-                        <p>Анапа</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Витязево</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Сукко</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Большой Утриш</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                            <li>Дельфинарий</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>Описание</h3>
-                <ul class="level-2">
-                    <li>
-                        <p>Анапа</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Витязево</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Сукко</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Большой Утриш</p>
-                        <ul class="level-3">
-                            <li>Карусель</li>
-                            <li>Аквапарк</li>
-                            <li>Дельфинарий</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <h3>О нас</h3>
-                <ul class="level-3">
-                    <li>Движение первых</li>
-                    <li>e-mail</li>
                 </ul>
             </li>
         </ul>

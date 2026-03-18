@@ -2,7 +2,7 @@
 using WebAppAnapaDeti.AppCode.Features.Users;
 using WebAppAnapaDeti.DAL;
 using WebAppAnapaDeti.DAL.Extensions;
-using WebAppAnapaDeti.Models._ViewModels;
+using WebAppAnapaDeti.Models._ViewModels.User;
 using WebAppAnapaDeti.Models.Entities;
 
 namespace WebAppAnapaDeti.AppCode

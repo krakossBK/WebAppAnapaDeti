@@ -1,4 +1,4 @@
-﻿namespace WebAppAnapaDeti.Models._ViewModels
+﻿namespace WebAppAnapaDeti.Models._ViewModels.User
 {
     public class UserLoginConfirmByLinkFromEmailViewModel
     {

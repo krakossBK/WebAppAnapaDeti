@@ -1,6 +1,6 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
-using WebAppAnapaDeti.Models._ViewModels;
+using WebAppAnapaDeti.Models._ViewModels.User;
 using WebAppAnapaDeti.Models.Entities;
 using WebAppAnapaDeti.Models.Enums;
 

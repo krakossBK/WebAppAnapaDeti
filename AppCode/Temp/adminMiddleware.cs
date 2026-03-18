@@ -26,8 +26,7 @@ public class CustomClaimsTransformation(IOptions<AppSettings> appSettings) : ICl
     // todo add cache
     private bool IsAdmin(string userId)
     {
-        var separatorCharacter = ',';
-        var adminUserIds = _appSettings.AdminUserIds.Split(separatorCharacter);
-        return adminUserIds.Contains(userId);
+        var adminUserId = _appSettings.AdminUserEmail;
+        return adminUserId.Contains(userId);
     }
 }

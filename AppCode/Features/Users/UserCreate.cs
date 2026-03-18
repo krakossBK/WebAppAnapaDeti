@@ -38,15 +38,13 @@ public abstract class UserCreate
 
         public async Task<bool> MediatorSendMail(string email, Guid verificationCode, CancellationToken ct)
         {
-            string SiteUrl = options.Value.SiteUrl;
-            logger.LogInformation(SiteUrl);
             try
             {
                 #region Потдверждение почтого ящика нового ЮЗЕРА
-                string subscription = $"{options.Value.SiteUrl}confirm-email?code={Convert.ToString(verificationCode)}";
+                string subscription = $"{options.Value.WebAddress}{C.ConfirmEmailUrl}?code={Convert.ToString(verificationCode)}";
                 string sendTo = email;
                 string subject = "Подтверждение регистрации";
-                string body = $"Уважаемый новый пользователь<br/><br/>Для завершения регистрации Вам необходимо подтвердить адрес своей электронной почты.<br/>Для этого перейдите по ссылке - <a href=\'{subscription}'>Подтвердить e-mail</a>.<br/><br/><i>С уважением, aнапа.дети</i>";
+                string body = $"Уважаемый новый пользователь<br/><br/>Для завершения регистрации Вам необходимо подтвердить адрес своей электронной почты.<br/>Для этого перейдите по ссылке - <a href=\'{subscription}'>Подтвердить адрес своей электронной почты</a>.<br/><br/><i>С уважением, aнапа.дети</i>";
                 await mediator.Send(new SendMailCommand(sendTo, subject, body), ct);
                 #endregion
                 return true;

@@ -9,10 +9,15 @@ namespace WebAppAnapaDeti.Controllers
         private readonly ILogger<HomeController> _logger = logger;
 
         public IActionResult Index()
-        { _logger.LogInformation("Index");
+        { 
+            _logger.LogInformation("Index");
             return View();
         }
-
+        public IActionResult Contacts()
+        {
+            _logger.LogInformation("Contacts");
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

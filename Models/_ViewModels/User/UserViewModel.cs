@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebAppAnapaDeti.Models.Entities;
 using WebAppAnapaDeti.Models.Enums;
 
-namespace WebAppAnapaDeti.Models._ViewModels;
+namespace WebAppAnapaDeti.Models._ViewModels.User;
 
 public class UserViewModel
 {
@@ -22,7 +21,7 @@ public class UserViewModel
     [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Некорректный адрес электронной почты (e-mail)")]
     [StringLength(50, ErrorMessage = @"Email должен быть меньше 50-ти символов")]
     public required string Email { get; set; }
-    public List<User>? Companions { get; set; }
+    public List<Entities.User>? Companions { get; set; }
     public DateTime Created { get; set; }
     public bool EmailConfirmed { get; set; }
     public DateTime? SubscribeUntilDate { get; set; }

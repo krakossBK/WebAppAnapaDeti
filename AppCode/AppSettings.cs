@@ -17,7 +17,7 @@ public class AppSettings
     /// </summary>
     public string SiteUrl => WebAddress + "/";
     [Required] 
-    public required string AdminUserIds { get; set; }
+    public required string AdminUserEmail { get; set; }
     [Required]
     public required Dictionary<string, MailboxConfig> MailboxConfigs { get; set; }
 }
