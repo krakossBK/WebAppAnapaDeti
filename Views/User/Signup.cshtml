@@ -4,76 +4,10 @@
 @{
     ViewBag.Title = ViewBag.Heading;
 }
-<style>
-  
-    * {
-        box-sizing: border-box;
-    }
-
-    /* Добавление отступов в контейнеры */
-    .container {
-        padding: 16px;
-        background-color: white;
-    }
-
-    /* Поля ввода полной ширины */
-    input[type=text], input[type=password] {
-        width: 100%;
-        padding: 15px;
-        margin: 5px 0 22px 0;
-        display: inline-block;
-        border: none;
-        background: #f1f1f1;
-    }
-
-        input[type=text]:focus, input[type=password]:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-
-    /* Изменять стили hr по умолчанию */
-    hr {
-        border: 1px solid #f1f1f1;
-        margin-bottom: 25px;
-    }
-
-    /* Установите стиль для кнопки отправить */
-    .registerbtn {
-        background-color: var(--red);
-        padding: 12px 16px;
-        margin: 4px 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-        opacity: 0.6;
-        text-transform: uppercase;
-        color: var(--white);
-        font-size: 1.0rem;
-    }
-
-        .registerbtn:hover {
-            opacity: 1;
-        }
-
-    /* Добавление синего цвета текста к ссылкам */
-    a {
-        color: dodgerblue;
-    }
-
-    /* Установите серый цвет фона и центрируйте текст раздела вход */
-    .signin {
-        background-color: #f1f1f1;
-        text-align: center;
-    }
-
-    .form-signin
-    {
-        margin:10%;
-    }
-</style>
+<link rel="stylesheet" href="~/css/reg.css" asp-append-version="true" />
 <form method="post" class="form-signin">
     <div class="container">
-        <h2>Регистрация</h2>
+        <h1 style="margin-bottom: 30px;">Регистрация</h1>
         <p>Пожалуйста, заполните эту форму, чтобы создать учетную запись.</p>
         <hr>
         <label for="ContactName"><b>Контактное имя</b></label>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - АНАПА.ДЕТИ</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/cookie.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -28,7 +29,7 @@
                 @* <h3>Описание</h3> *@
                 <ul class="level-2">
                     <li>
-                        <p>Детский оздоровительный лагерь</p>
+                        <p></p>
                         <ul class="level-3">
                             <li>Анапа</li>
                             <li>Витязево</li>
@@ -37,25 +38,37 @@
                         </ul>
                     </li>
                     <li>
-                        <p>Личный кабинет</p>
+                        <p></p>
                         <ul class="level-3">
                             <li> <a asp-controller="User" asp-action="Login">Войти</a></li>
                             <li><a asp-controller="User" asp-action="Signup">Регистрация</a></li>
                         </ul>
                     </li>
                     <li>
-                        <p>О нас</p>
+                        <p></p>
                         <ul class="level-3">
-                            <li><a asp-controller="Home" asp-action="Contacts">Контакты</a></li>
                             <li>Отзывы</li>
+                            <li><a asp-controller="Home" asp-action="Contacts">Контакты</a></li>
                         </ul>
                     </li>
                 </ul>
             </li>
         </ul>
     </section>
-    <script src="~/js/gsap.min.js"></script>
+    <div class="cookie-v-2">
+        <div class="cookie-v-2__content">
+            <span class="cookie-v-2__disclaimer">
+                Пользуясь сайтом, вы соглашаетесь на использование cookies и принимаете
+                <a class="cookie-v-2__disclaimer-link" asp-controller="Home" asp-action="PolitikaPDN">
+                    политику конфиденциальности
+                </a>
+            </span>
+            <button class="cookie-v-2__button">Принять</button>
+        </div>
+    </div>
+    <script src="~/js/gsap.min.js"></script>    
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/cookie.js" asp-append-version="true" defer></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

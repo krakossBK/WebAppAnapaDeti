@@ -1,6 +1,8 @@
-using System.Diagnostics;
-using WebAppAnapaDeti.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using WebAppAnapaDeti.AppCode;
+using WebAppAnapaDeti.Models;
 
 namespace WebAppAnapaDeti.Controllers
 {
@@ -16,6 +18,13 @@ namespace WebAppAnapaDeti.Controllers
         public IActionResult Contacts()
         {
             _logger.LogInformation("Contacts");
+            return View();
+        }
+        [HttpGet("/politika-konfidentsialnosti")]
+        [AllowAnonymous]
+        public IActionResult PolitikaPDN()
+        {
+            _logger.LogInformation("PolitikaPDN");
             return View();
         }
 
