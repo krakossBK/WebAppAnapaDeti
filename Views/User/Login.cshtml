@@ -1,7 +1,57 @@
-﻿@model WebAppAnapaDeti.Models._ViewModels.User.UserLoginViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebAppAnapaDeti.Models._ViewModels.User.UserLoginViewModel
 
 @{
     ViewBag.Title = ViewBag.Heading;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var errorMessage = Model.ErrorMessage;
 }
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+<div class="form-signin">
+    <div class="form login__form js-form" action="#" autocomplete="off">
+        <div class="form__header">
+            <h2 class="text text--xl text--bold text--center text--upper form__title">Вход</h2>
+            <p class="text text--center text--xs text--neutral-600 form__text form__text--mt-xs">С возвращением! Введите свои данные</p>
+        </div>
+        <div id="form-main-login" class="form__main">
+            <div class="input form__item">
+                <label class="text text--sm input__label input__label--mb-sm" for="email">Логин</label>
+                <div class="input__main">
+                    <input class="input__field input__field--sm"
+                           id="email"
+                           type="text"
+                           name="email"
+                           data-validate="email" />
+                </div>
+                <span class="text text--sm text--lh-125 input__error"></span>
+            </div>
+            <div class="input form__item">
+                <label class="text text--sm input__label input__label--mb-sm" for="login-password">Пароль</label>
+                <div class="input__main">
+                    <input class="input__field input__field--sm input__field--with-eye"
+                           id="login-password"
+                           type="password"
+                           name="password"
+                           enterkeyhint="send" />
+                    <button class="input__eye-btn" type="button"></button>
+                </div>
+                <span class="text text--sm text--lh-125 input__error"></span>
+            </div>
+            <a class="link link--primary link--hover-line link--lg link--iblock link--blue-500 form__remind" href="javascript:void(null);" id="link-resend-password">Забыли пароль?</a>
+            <button class="btn btn--full btn--text-lg btn--blue-500 btn--py-sm form__btn" id="link-login">Войти</button>
+            <p class="text text--sm text--center text--lh-125 form__addition">
+                У Вас нет аккаунта?
+                <a href="/registration">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- hidden variables -->
+<input type="hidden" id="errorMessage" value="@errorMessage" />
+<!-- // hidden variables -->
+<!-- js -->
+@section scripts {
+    <script src="~/js/user/login.js" asp-append-version="true"></script>
+}
+<!-- // js -->

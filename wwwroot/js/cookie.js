@@ -1,4 +1,5 @@
-﻿const cookieV2 = document.querySelector('.cookie-v-2');
+﻿'use strict';
+const cookieV2 = document.querySelector('.cookie-v-2');
 
 if (cookieV2) {
     if (localStorage.getItem('cookie_v_2') === 'hidden') {

@@ -39,7 +39,7 @@ public class LocalStoreService
 
         var dir = Path.GetDirectoryName(path);
 
-        CreateDirectory(dir);
+        CreateDirectory(path: dir);
 
         File.WriteAllBytes(path, bytes);
     }
