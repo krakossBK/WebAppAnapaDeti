@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using WebAppAnapaDeti.AppCode.Features.Mail;
 using WebAppAnapaDeti.DAL;
 using WebAppAnapaDeti.DAL.Extensions;
+using WebAppAnapaDeti.Models._ViewModels;
 using WebAppAnapaDeti.Models.Entities;
 
 
@@ -16,6 +17,7 @@ public abstract class UserCreate
         IAppDbContext appContext,
         ILogger<Handler> logger,
         IMediator mediator,
+        LogSiteHelper logSiteHelper,
         IOptions<AppSettings> options
         ) : IRequestHandler<Command, bool>
     {
@@ -27,6 +29,16 @@ public abstract class UserCreate
                 string id = appContext.AddUser(request.User);
                 if (!string.IsNullOrEmpty(id))
                     result = await MediatorSendMail(request.User.Email, request.User.VerificationCode, ct);
+                if (result)
+                {
+                    LogSiteViewModel logSiteViewModel = new()
+                    {
+                        LogTypeId = 1,
+                        Message = "await MediatorSendMail - " + request.User.Email
+                    };
+
+                    await logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+                }
                 return result;
             }
             catch (Exception ex)

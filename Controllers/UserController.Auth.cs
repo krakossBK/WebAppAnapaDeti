@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppAnapaDeti.AppCode;
+using WebAppAnapaDeti.AppCode.Features.LogSites;
 using WebAppAnapaDeti.AppCode.Features.Mail;
 using WebAppAnapaDeti.DAL.Extensions;
+using WebAppAnapaDeti.Models._ViewModels;
 using WebAppAnapaDeti.Models._ViewModels.User;
 using WebAppAnapaDeti.Models.Entities;
 using WebAppAnapaDeti.Models.Enums;
@@ -360,16 +363,25 @@ public partial class UserController
 
     [HttpPost(C.RegistrationUrl)]
     [AllowAnonymous]
-    public async Task<string> Signup(User userA, CancellationToken cancellationToken)
+    public async Task<string> Signup(User userA, CancellationToken ct)
     {
         // так же необхолимо выполнить запросы на уникальность Email нового Юзера
-        if (!_appContext.IsUserEmailUnique(userA.Email, false))
-            return C.TextErrors;
+        if (!_appContext.IsUserEmailUnique(userA.Email.Trim(), false))
+          {
+            LogSiteViewModel logSiteViewModel = new()
+            {
+                LogTypeId = 1,
+                Message = "IsUserEmailUnique - NO " + userA.Email
+            };
+
+            await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+            return C.TextError; 
+        }
 
         User user = new()
         {
-            Email = userA.Email,
-            Password = SecurityHelper.Encryption(userA.Password),
+            Email = userA.Email.Trim(),
+            Password = SecurityHelper.Encryption(userA.Password.Trim()),
             ContactName = userA.ContactName,
             UserLogoUrl = C.NoLogoImageUrl,
             GenerateSessionID = "",
@@ -381,24 +393,31 @@ public partial class UserController
         bool IsRegistered = await _userHelper.CreateUserAndSendEmail(user); // Добавление пользователя в БД в таблицу Users
         if (IsRegistered)
         {
+            LogSiteViewModel logSiteViewModel = new()
+            {
+                LogTypeId = 1,
+                Message = "IsRegistered - " + user.Email
+            };
+
+           await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
             // отправляем письмо на адрес SupportEmail об успешной регистрации new User
-            return await SendEmailNewUser(user.Email, user.ContactName, cancellationToken)
+            return await SendEmailNewUser(user.Email, user.ContactName, ct)
                     ? C.TextOk
-                    : C.TextErrors;
+                    : C.TextError;
         }
 
-        return C.TextErrors;
+        return C.TextError;
     }
 
 
-    public async Task<bool> SendEmailNewUser(string email, string contactName, CancellationToken cancellationToken)
+    public async Task<bool> SendEmailNewUser(string email, string contactName, CancellationToken ct)
     {
         try
         {
             // отправляем письмо на адрес SupportEmail об успешной регистрации со ссылкой на профиль организации
             await _mediator.Send(new SendMailCommand(C.SupportEmail,
                 "Новый пользователь зарегистрировался",
-                $"Новый пользователь {email}, {contactName}"), cancellationToken);
+                $"Новый пользователь {email}, {contactName}"), ct);
             return true;
         }
         catch (Exception ex)

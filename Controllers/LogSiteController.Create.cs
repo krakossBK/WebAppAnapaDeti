@@ -1,5 +1,6 @@
 ﻿using WebAppAnapaDeti.AppCode.Features.LogSites;
 using Microsoft.AspNetCore.Mvc;
+using WebAppAnapaDeti.AppCode;
 
 namespace WebAppAnapaDeti.Controllers;
 
@@ -10,12 +11,14 @@ public partial class LogSiteController
     {
         try
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(command)
+                ? C.TextOk
+                : C.TextError;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "async Task<string> CreateLogSite");
-            return "krakoss";
+            return C.TextError;
         }
     }
 }
