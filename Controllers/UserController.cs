@@ -10,6 +10,7 @@ namespace WebAppAnapaDeti.Controllers;
 [Authorize]
 public partial class UserController : Controller
 {
+    private readonly SM _sm;
     private readonly UserHelper _userHelper;
     private readonly LogSiteHelper _logSiteHelper;
     private readonly ILogger<UserController> _logger;
@@ -17,7 +18,8 @@ public partial class UserController : Controller
     private readonly IMediator _mediator;
     private readonly AppSettings _appSettings;
 
-    public UserController(UserHelper userHelper,
+    public UserController(SM sm,
+        UserHelper userHelper,
                           LogSiteHelper logSiteHelper,
                           IWebHostEnvironment env,
                           ILogger<UserController> logger,
@@ -27,6 +29,7 @@ public partial class UserController : Controller
     {
         ArgumentNullException.ThrowIfNull(env);
         ArgumentNullException.ThrowIfNull(appSettings);
+        _sm = sm ?? throw new ArgumentNullException(nameof(sm));
         _userHelper = userHelper ?? throw new ArgumentNullException(nameof(userHelper));
         _logSiteHelper = logSiteHelper ?? throw new ArgumentNullException(nameof(userHelper));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

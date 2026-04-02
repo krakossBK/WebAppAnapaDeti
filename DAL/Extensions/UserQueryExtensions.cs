@@ -57,11 +57,13 @@ public static class UserQueryExtensions
     /// <param name="context">appDbContext</param>
     /// <param name="email">email</param>
     /// <returns>User</returns>
-    public static User? GetUserByEmailLogin(this IAppDbContext context, string email) => context.Query<User>()
+    public static User? GetUserByEmail(this IAppDbContext context, string email) => context.Query<User>()
         .OrderBy(f => f.Id)
         .LastOrDefault(f => f.Email == email);
 
-    public static bool IsUserEmailUnique(this IAppDbContext context, string email, bool removedFromSite) => context.Query<User>()
+    public static bool IsUserEmailUnique(this IAppDbContext context,
+                                         string email,
+                                         bool removedFromSite) => context.Query<User>()
         .Where(w => w.Deleted == removedFromSite)
         .All(f => f.Email != email);
 
@@ -71,8 +73,11 @@ public static class UserQueryExtensions
     /// <param name="context">this IAppDbContext context</param>
     /// <param name="guidString"> GUID VerificationCode</param>
     /// <returns>User</returns>
-    public static User? GetUserByToken(this IAppDbContext context, string guidString) => context.Query<User>()
-       .FirstOrDefault(f => f.VerificationCode.Equals(Guid.Parse(guidString)));
+    public static UserViewModel GetUserByToken(this IAppDbContext context, string guidString) 
+        => context.Query<User>()
+        .FirstOrDefault(f => f.VerificationCode.Equals(Guid.Parse(guidString)))
+        .Adapt<UserViewModel>();
+
 
     /// <summary>
     /// запишем в БД данные о событии успешного подтверждения Email адреса и включим подписку на емайл 
@@ -82,7 +87,10 @@ public static class UserQueryExtensions
     /// <param name="emailConfirmed">bool emailConfirmed</param>
     /// <param name="emailAlert">bool emailAlert</param>
     /// <returns>true OR false</returns>
-    public static bool UpdateUserEmailConfirmed(this IAppDbContext context, Guid userId, bool emailConfirmed, bool emailAlert) => context.Query<User>()
+    public static bool UpdateUserEmailConfirmed(this IAppDbContext context,
+                                                Guid userId,
+                                                bool emailConfirmed,
+                                                bool emailAlert) => context.Query<User>()
         .Where(w => w.Id == userId)
         .ExecuteUpdate(e => e
             .SetProperty(p => p.EmailConfirmed, emailConfirmed)
@@ -95,7 +103,9 @@ public static class UserQueryExtensions
     /// <param name="userId">Guid userId</param>
     /// <param name="moderateResultId">int moderateResultId</param>
     /// <returns>true OR false</returns>
-    public static bool UpdateUserModerateResult(this IAppDbContext context, Guid userId, int moderateResultId) => context.Query<User>()
+    public static bool UpdateUserModerateResult(this IAppDbContext context,
+                                                Guid userId,
+                                                int moderateResultId) => context.Query<User>()
        .Where(w => w.Id == userId)
        .ExecuteUpdate(e => e
            .SetProperty(p => p.ModerateResult, (ModerateResults)moderateResultId)) > 0;
@@ -105,12 +115,30 @@ public static class UserQueryExtensions
     /// </summary>
     /// <param name="context">this IAppDbContext context</param>
     /// <param name="userId">Guid userId</param>
-    /// <param name="guidString">Guid guidString</param>
+    /// <param name="token">Guid token</param>
     /// <returns>true OR false</returns>
     public static bool UpdateVerificationCode(this IAppDbContext context,
                                               Guid userId,
-                                              Guid guidString) => context.Query<User>()
+                                              Guid token) => context.Query<User>()
         .Where(w => w.Id == userId)
         .ExecuteUpdate(e => e
-            .SetProperty(p => p.VerificationCode,  guidString)) > 0;
+            .SetProperty(p => p.VerificationCode, token)) > 0;
+
+    /// <summary>
+    /// обновить пароль Юзера <br />
+    /// и задать новый токен 
+    /// </summary>
+    /// <param name="context">this IAppDbContext context</param>
+    /// <param name="userId">Guid userId</param>
+    /// <param name="token">Guid token</param>
+    /// <param name="password">string password</param>
+    /// <returns>true OR false</returns>
+    public static bool UpdateUserResetPassword(this IAppDbContext context,
+                                               Guid userId,
+                                               Guid token,
+                                               string password) => context.Query<User>()
+       .Where(w => w.Id == userId)
+       .ExecuteUpdate(e => e
+           .SetProperty(p => p.Password, password)
+           .SetProperty(p => p.VerificationCode, token)) > 0;
 }

@@ -404,3 +404,13 @@ function formInputHandler($input, $form) {
         }
     });
 }
+const $eyeBtns = document.querySelectorAll(".input__eye-btn");
+$eyeBtns.forEach(($eyeBtn) => {
+    $eyeBtn.addEventListener("click", () => {
+        $eyeBtn.classList.toggle("input__eye-btn--active");
+
+        const $field = $eyeBtn.closest(".input").querySelector(".input__field");
+        const type = $field.getAttribute("type") === "password" ? "text" : "password";
+        $field.setAttribute("type", type);
+    });
+});

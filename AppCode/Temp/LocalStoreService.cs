@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace WebAppAnapaDeti;
+namespace WebAppAnapaDeti.AppCode.Temp;
 
 public class LocalStoreConfig
 {

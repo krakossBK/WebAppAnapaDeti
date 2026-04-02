@@ -47,7 +47,7 @@ $linkLogin.addEventListener("click", async () => {
                         },
                     });
                 }
-                else if (errorMessage != textErrors) {
+                else if (errorMessage != textError) {
                     if (errorMessage.includes("User is not registered"))
                         LoadPageRegistration(email);
                     if (errorMessage.includes("User deleted"))

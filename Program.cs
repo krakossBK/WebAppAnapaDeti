@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using WebAppAnapaDeti;
 using WebAppAnapaDeti.AppCode;
+using WebAppAnapaDeti.AppCode.Temp;
 using WebAppAnapaDeti.DAL;
 using WebAppAnapaDeti.Infrastructure.Behaviors;
 
@@ -77,6 +77,8 @@ services.AddSingleton(TypeAdapterConfig.GlobalSettings);
 
 services.AddScoped<LogSiteHelper>();
 services.AddScoped<SecurityHelper>();
+services.AddScoped<SM>();
+services.AddScoped<IUserContext>(sp => sp.GetRequiredService<SM>());
 services.AddScoped<UserHelper>();
 services.Configure<LocalStoreConfig>(c => c.BasePath ??= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DContent"));
 services.AddScoped<LocalStoreService>();
@@ -87,6 +89,7 @@ services.AddOptions<AppSettings>()
     .BindConfiguration("appSettings")
     .ValidateDataAnnotations()
     .ValidateOnStart();
+
 
 services.AddControllers();
 

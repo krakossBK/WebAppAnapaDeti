@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using Mapster;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebAppAnapaDeti.AppCode;
-using WebAppAnapaDeti.AppCode.Features.LogSites;
 using WebAppAnapaDeti.AppCode.Features.Mail;
 using WebAppAnapaDeti.DAL.Extensions;
 using WebAppAnapaDeti.Models._ViewModels;
@@ -32,105 +34,83 @@ public partial class UserController
         return View(viewModel);
     }
 
-    //[AllowAnonymous]
-    //[HttpPost(C.LoginUrl)]
-    //public async Task<string> Login(string email, string password)
-    //{
-    //    ViewBag.L.HideHead = true; // так же надо будет настроить и Footer
-    //    ViewBag.L.HideFooter = true;
-    //    ViewBag.Heading = "Вход";
+    [AllowAnonymous]
+    [HttpPost(C.LoginUrl)]
+    public async Task<string> Login(string email, string password)
+    {
+        //ViewBag.L.HideHead = true; // так же надо будет настроить и Footer
+        //ViewBag.L.HideFooter = true;
+        ViewBag.Heading = "Вход";
 
-    //    if (string.IsNullOrEmpty(email))
-    //        return "Некорректный email";
-    //    if (string.IsNullOrEmpty(password))
-    //        return "Некорректный пароль";
-    //    if (email == null)
-    //        return "Вы не указали емайл";
-    //    if (password == null)
-    //        return "Вы не указали пароль";
+        if (string.IsNullOrEmpty(email))
+            return "Некорректный email";
+        if (string.IsNullOrEmpty(password))
+            return "Некорректный пароль";
+        if (email == null)
+            return "Вы не указали емайл";
+        if (password == null)
+            return "Вы не указали пароль";
 
-    //    // поверка на то что Юзер не числиться в удаленных
-    //    var userLogin = _appContext.GetUserByEmailLogin(email);
-    //    if (userLogin != null
-    //        && userLogin.Deleted)
-    //    {
-    //        _logger.LogInformation("user.Id => {userLogin.Id}", userLogin.Id);
-    //        _logger.LogInformation("user.Deleted => {userLogin.Deleted}", userLogin.Deleted);
-    //        return $"User deleted";
-    //    }
+        // поверка на то что Юзер не числиться в удаленных
+        var userLogin = _appContext.GetUserByEmail(email);
+        if (userLogin != null
+            && userLogin.Deleted)
+        {
+            _logger.LogInformation("user.Id => {userLogin.Id}", userLogin.Id);
+            _logger.LogInformation("user.Deleted => {userLogin.Deleted}", userLogin.Deleted);
+            return $"User deleted";
+        }
 
-    //    // поверка на то что Юзер не числиться вообще
-    //    var user = _appContext.GetUserByEmail(email);
-    //    if (user == null)
-    //        return $"User is not registered";
+        // поверка на то что Юзер не числиться вообще
+        var user = _appContext.GetUserByEmail(email);
+        if (user == null)
+            return $"User is not registered";
 
-    //    if (user.Password != SecurityHelper.Encryption(password))
-    //        return "Неверный пароль";
+        if (user.Password != SecurityHelper.Encryption(password))
+            return "Неверный пароль";
 
-    //    if (!user.EmailConfirmed
-    //        && user.ModerateResult == ModerateResults.Accepted)
-    //        return $"get confirmation email again";
+        if (!user.EmailConfirmed
+            && user.ModerateResult == ModerateResults.Accepted)
+            return $"get confirmation email again";
 
-    //    if (user.ModerateResult != ModerateResults.Accepted)
-    //        return "Пользователь на модерации";
+        if (user.ModerateResult != ModerateResults.Accepted)
+            return "Пользователь на модерации";
 
-    //    _sm.CurrentUser = user.Adapt<UserViewModel>();
-    //    _sm.LoginTime = DateTime.Now;
-    //    await Auth(user);
-    //    SaveCookiesForSIWAuthToken(user.ShowInformationWindow);
-    //    // после входа на сайт 
-    //    // создать список всех Id полученные сообщения со статусом == отправлено sent = 0 
-    //    List<int> sentMessageIds = [.. _appContext.GetMessagesOfMessageStatus(user.Id, (int)MessageStatuses.sent)
-    //        .Select(m => m.Id)];
-    //    if (sentMessageIds.Count != 0)
-    //        _appContext.UpdateMessageStatus(sentMessageIds,
-    //            (int)MessageStatuses
-    //                .delivered); // обновить все полученные сообщения на статус = ДОСТАВЕНО delivered = 1
-    //    return C.TextOk;
-    //}
+        _sm.CurrentUser = user.Adapt<UserViewModel>();
+        _sm.LoginTime = DateTime.Now;
+        await Auth(user);
+      
+       
+        return C.TextOk;
+    }
 
-    ///// <summary>
-    ///// Выполняет все необходимые действия для события успешного входа на сайт
-    ///// </summary>
-    //public async Task<IActionResult> LoginSuccuess(User user)
-    //{
-    //    _sm.CurrentUser = user.Adapt<UserViewModel>();
-    //    _sm.LoginTime = DateTime.Now;
-    //    await Auth(user);
-    //    SaveCookiesForSIWAuthToken(user.ShowInformationWindow);
-    //    // после входа на сайт 
-    //    // создать список всех Id полученные сообщения со статусом == отправлено sent = 0 
-    //    List<int> sentMessageIds = [.. _appContext.GetMessagesOfMessageStatus(user.Id, (int)MessageStatuses.sent).Select(m => m.Id)];
-    //    if (sentMessageIds.Count != 0)
-    //        _appContext.UpdateMessageStatus(sentMessageIds,
-    //            (int)MessageStatuses
-    //                .delivered); // обновить все полученные сообщения на статус = ДОСТАВЕНО delivered = 1
+    /// <summary>
+    /// Выполняет все необходимые действия для события успешного входа на сайт
+    /// </summary>
+    public async Task<IActionResult> LoginSuccuess(User user)
+    {
+        _sm.CurrentUser = user.Adapt<UserViewModel>();
+        _sm.LoginTime = DateTime.Now;
+        await Auth(user);
+       
+        //// после входа на сайт 
+        //// создать список всех Id полученные сообщения со статусом == отправлено sent = 0 
+        //List<int> sentMessageIds = [.. _appContext.GetMessagesOfMessageStatus(user.Id, (int)MessageStatuses.sent).Select(m => m.Id)];
+        //if (sentMessageIds.Count != 0)
+        //    _appContext.UpdateMessageStatus(sentMessageIds,
+        //        (int)MessageStatuses
+        //            .delivered); // обновить все полученные сообщения на статус = ДОСТАВЕНО delivered = 1
 
-    //    return RedirectToAction("MyProfile", "User");
-    //}
+        return RedirectToAction("MyProfile", "User");
+    }
 
-    //public void SaveCookiesForSIWAuthToken(bool showInformationWindow)
-    //{
-    //    HttpContext.Response.Cookies.Delete("siw");
-    //    string _showInformationWindow = showInformationWindow ? "false" : "true";
-    //    HttpContext.Session.SetString("siw", _showInformationWindow);
+    [HttpPost("/logout")]
+    public IActionResult Logout()
+    {
+        LogoutInternal();
 
-
-    //    HttpContext.Response.Cookies.Delete("AuthToken");
-    //    string guid = Guid.NewGuid().ToString();
-    //    HttpContext.Session.SetString("AuthToken", guid);
-
-    //    // now create a new cookie with this guid value
-    //    Response.SaveCookiesAuthToken(guid, _showInformationWindow);
-    //}
-
-    //[HttpPost("/logout")]
-    //public IActionResult Logout()
-    //{
-    //    LogoutInternal();
-
-    //    return Ok(C.TextOk);
-    //}
+        return Ok(C.TextOk);
+    }
 
     #endregion
 
@@ -254,100 +234,98 @@ public partial class UserController
 
     //#endregion
 
-    //#region 2025 krakoss Отправка запроса для подтверждения входа с Кодом из 6 цифр /user/resend-email
-    //[HttpGet("/user/resend-email")]
-    //public async Task<string> SendConfirmLinkToEmail(string email)
-    //{
-    //    string verificationCode = Convert.ToString(Guid.NewGuid());
-    //    var dbUser = _appContext.GetUserByEmail(email);
-    //    if (dbUser == null)
-    //        return "Пользователя с данным именем " + email +
-    //               " не существует. Проверьте правильность ввода или зарегистрируйтесь.";
-    //    else
-    //    {
-    //        if (!_appContext.UpdateVerificationCode(dbUser.Id, verificationCode))
-    //            return "Ошибка отправки почты на  Ваш e-mail - " + email;
-    //        else
-    //        {
-    //            try
-    //            {
-    //                string sendTo = dbUser.Email;
+    #region 2025 krakoss Вы не подтвердили Ваш E-mail.<br> Хотите получить письмо подтверждения повторно 
+    // Отправка запроса для подтверждения входа с Кодом из Guid.NewGuid() /user/resend-email
+    [HttpGet("/user/resend-email")]
+    public async Task<string> SendConfirmLinkToEmail(string email)
+    {
+        Guid verificationCode = Guid.NewGuid();
+        var dbUser = _appContext.GetUserByEmail(email);
+        if (dbUser == null)
+            return "Пользователя с данным именем " + email +
+                   " не существует. Проверьте правильность ввода или зарегистрируйтесь.";
+        else
+        {
+            if (!_appContext.UpdateVerificationCode(dbUser.Id, verificationCode))
+                return "Ошибка отправки почты на  Ваш e-mail - " + email;
+            else
+            {
+                try
+                {
+                    string sendTo = dbUser.Email;
 
-    //                #region Отправка письма
+                    #region Отправка письма
 
-    //                string confirmLoginLink =
-    //                    $"{C.SiteUrl}confirm-browser?userId={dbUser.Id}&verificationCode={verificationCode}";
-    //                string subject = "Пожалуйста подтвердите вход на сайт";
-    //                string body = @"Уважаемый пользователь,<br/> <br/> " +
-    //                              @"Вы получили это письмо, потому что в Ваш аккаунт была совершена попытка входа с нового устройства (либо изменился ip-адрес). <br/><br/> " +
-    //                              @"В целях безопасности, подтвердите свою личность переходом по следующей ссылке - <a href=""" +
-    //                              confirmLoginLink + @""">войти на сайт</a>.<br/><br/> " +
-    //                              @"Если это произошло без Вашего ведома, настоятельно рекомендуем при следующей авторизации сменить пароль от аккаунта.<br/><br/> " +
-    //                              @"<i>С уважением, M-Contract</i>";
+                    string confirmLoginLink =
+                        $"{_appSettings.WebAddress}confirm-browser?userId={dbUser.Id}&verificationCode={verificationCode}";
+                    string subject = "Пожалуйста подтвердите вход на сайт";
+                    string body = @"Уважаемый пользователь,<br/> <br/> " +
+                                  @"Вы получили это письмо, потому что в Ваш аккаунт была совершена попытка входа с нового устройства (либо изменился ip-адрес). <br/><br/> " +
+                                  @"В целях безопасности, подтвердите свою личность переходом по следующей ссылке - <a href=""" +
+                                  confirmLoginLink + @""">войти на сайт</a>.<br/><br/> " +
+                                  @"Если это произошло без Вашего ведома, настоятельно рекомендуем при следующей авторизации сменить пароль от аккаунта.<br/><br/> " +
+                                  @"<i>С уважением, анапа.дети</i>";
 
-    //                // отправляем письмо на адрес SupportEmail об успешной регистрации со ссылкой на профиль организации
-    //                await _mediator.Send(new SendMailCommand(sendTo, subject, body));
+                    // отправляем письмо на адрес SupportEmail об успешной регистрации со ссылкой на профиль организации
+                    await _mediator.Send(new SendMailCommand(sendTo, subject, body));
 
-    //                #endregion
+                    #endregion
 
-    //                return C.TextOk;
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                return "почта не может быть доставлена" + ex.ToString();
-    //            }
-    //        }
-    //    }
-    //}
-    //#endregion
+                    return C.TextOk;
+                }
+                catch (Exception ex)
+                {
+                    return "почта не может быть доставлена" + ex.ToString();
+                }
+            }
+        }
+    }
+    #endregion
 
-    //#region 2025 krakoss Отправка запроса для подтверждения входа с Кодом из 6 цифр /user/resend-code
+    #region 2025 krakoss Отправка запроса для подтверждения входа с Кодом из Guid.NewGuid() /user/resend-code
+    [HttpGet("/user/resend-code")]
+    public async Task<string> ResendCodeToEmail(string email)
+    {
+        Guid verificationCode = Guid.NewGuid();
+        var dbUser = _appContext.GetUserByEmail(email);
+        if (dbUser == null)
+            return "Пользователя с данным именем " + email +
+                   " не существует. Проверьте правильность ввода или зарегистрируйтесь.";
+        else
+        {
+            if (!_appContext.UpdateVerificationCode(dbUser.Id, verificationCode))
+                return "Ошибка отправки почты на  Ваш e-mail - " + email;
+            else
+            {
+                try
+                {
+                    string sendTo = dbUser.Email;
 
-    //[HttpGet("/user/resend-code")]
-    //public async Task<string> ResendCodeToEmail(string email)
-    //{
-    //    string verificationCode = Convert.ToString(Guid.NewGuid());
-    //    var dbUser = _appContext.GetUserByEmail(email);
-    //    if (dbUser == null)
-    //        return "Пользователя с данным именем " + email +
-    //               " не существует. Проверьте правильность ввода или зарегистрируйтесь.";
-    //    else
-    //    {
-    //        if (!_appContext.UpdateVerificationCode(dbUser.Id, verificationCode))
-    //            return "Ошибка отправки почты на  Ваш e-mail - " + email;
-    //        else
-    //        {
-    //            try
-    //            {
-    //                string sendTo = dbUser.Email;
+                    #region Отправка письма
+                    string confirmLoginLink =
+                        $"{_appSettings.WebAddress}confirm-browser?userId={dbUser.Id}&verificationCode={verificationCode}";
+                    string subject = "Пожалуйста подтвердите вход на сайт";
+                    string body = @"Уважаемый пользователь,<br/> <br/> " +
+                                  @"Вы получили это письмо, потому что в Ваш аккаунт была совершена попытка входа с нового устройства (либо изменился ip-адрес). <br/><br/> " +
+                                  @"В целях безопасности, подтвердите свою личность переходом по следующей ссылке - <a href=""" +
+                                  confirmLoginLink + @""">войти на сайт</a>.<br/><br/> " +
+                                  @"Если это произошло без Вашего ведома, настоятельно рекомендуем при следующей авторизации сменить пароль от аккаунта.<br/><br/> " +
+                                  @"<i>С уважением, анапа.дети</i>";
 
-    //                #region Отправка письма
+                    // отправляем письмо на адрес SupportEmail об успешной регистрации со ссылкой на профиль организации
+                    await _mediator.Send(new SendMailCommand(sendTo, subject, body));
+                    #endregion
 
-    //                string confirmLoginLink =
-    //                    $"{C.SiteUrl}confirm-browser?userId={dbUser.Id}&verificationCode={verificationCode}";
-    //                string subject = "Пожалуйста подтвердите вход на сайт";
-    //                string body = @"Уважаемый пользователь,<br/> <br/> " +
-    //                              @"Вы получили это письмо, потому что в Ваш аккаунт была совершена попытка входа с нового устройства (либо изменился ip-адрес). <br/><br/> " +
-    //                              @"В целях безопасности, подтвердите свою личность переходом по следующей ссылке - <a href=""" +
-    //                              confirmLoginLink + @""">войти на сайт</a>.<br/><br/> " +
-    //                              @"Если это произошло без Вашего ведома, настоятельно рекомендуем при следующей авторизации сменить пароль от аккаунта.<br/><br/> " +
-    //                              @"<i>С уважением, M-Contract</i>";
-
-    //                // отправляем письмо на адрес SupportEmail об успешной регистрации со ссылкой на профиль организации
-    //                await _mediator.Send(new SendMailCommand(sendTo, subject, body));
-
-    //                #endregion
-
-    //                return C.TextOk;
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                return "почта не может быть доставлена" + ex.ToString();
-    //            }
-    //        }
-    //    }
-    //}
-    //#endregion
+                    return C.TextOk;
+                }
+                catch (Exception ex)
+                {
+                    return "почта не может быть доставлена" + ex.ToString();
+                }
+            }
+        }
+    }
+    #endregion
 
     #region Регистрация нового ЮЗЕРА
 
@@ -367,7 +345,7 @@ public partial class UserController
     {
         // так же необхолимо выполнить запросы на уникальность Email нового Юзера
         if (!_appContext.IsUserEmailUnique(userA.Email.Trim(), false))
-          {
+        {
             LogSiteViewModel logSiteViewModel = new()
             {
                 LogTypeId = 1,
@@ -375,7 +353,7 @@ public partial class UserController
             };
 
             await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
-            return C.TextError; 
+            return C.TextError;
         }
 
         User user = new()
@@ -399,7 +377,7 @@ public partial class UserController
                 Message = "IsRegistered - " + user.Email
             };
 
-           await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+            await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
             // отправляем письмо на адрес SupportEmail об успешной регистрации new User
             return await SendEmailNewUser(user.Email, user.ContactName, ct)
                     ? C.TextOk
@@ -440,4 +418,39 @@ public partial class UserController
     }
 
     #endregion
+
+    private async Task Auth(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, $"{user.Id}"),
+            new(ClaimTypes.Email, user.Email),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(
+            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            AllowRefresh = true,
+            ExpiresUtc = DateTimeOffset.UtcNow.AddYears(1),
+            IsPersistent = true
+        };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+        _logger.LogInformation("User {Email} logged in at {Time}.", user.Email, DateTime.UtcNow);
+    }
+
+    private void LogoutInternal()
+    {
+        if (Request.Cookies["ep"] != null)
+            Response.Cookies.Append("ep", string.Empty, new() { Expires = DateTime.Now.AddDays(-1) });
+        else
+            _logger.LogError("Response.Cookies = null или Response.Cookies[ep] = null в UserController.Logout()");
+
+        Response.Cookies.Append("AuthToken", "");
+
+        HttpContext.SignOutAsync();
+    }
 }

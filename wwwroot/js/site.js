@@ -2,6 +2,10 @@
 const hrefOrigin = window.location.origin; //  javascript.info/url
 const log = console.log; // Мы часто будем выводить данные в консоль, поэтому создадим такую "утилиту": habr.com/ru/companies/macloud/articles/557422/
 const logEr = console.error;
+var textOk = "ok";
+var textError = "error";
+var textNo = "no";
+//var currentUserId = document.getElementById('currentUserId') !== null ? document.getElementById('currentUserId').value : "";
 
 let burger = document.getElementById("burger");
 let overlay = document.getElementById("listmenu");
