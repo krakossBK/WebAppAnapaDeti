@@ -7,14 +7,23 @@
 
 @if (Model != null)
 {
-    <div style="text-align:center">
-        <h2>Ошибка при подтверждении входа</h2>
-        <h4>@Model.ErrorMessage</h4>
+    <div class="form-signin">
+        <div class="form login__form js-form" action="#" autocomplete="off">
+            <div class="form__header">
+                <h2 class="text text--xl text--bold text--center text--upper form__title">Ошибка при подтверждении входа</h2>
+                <p class="text text--center text--xs text--neutral-600 form__text form__text--mt-xs">@Model.ErrorMessage</p>
+            </div>
+        </div>
     </div>
 }
 else
 {
-    <div style="text-align:center">
-        <h4>Вход выполнен успешно. Выполняется переход в личный кабинет</h4>
+    <div class="form-signin">
+        <div class="form login__form js-form" action="#" autocomplete="off">
+            <div class="form__header">
+                <h2 class="text text--xl text--bold text--center text--upper form__title">Вход выполнен успешно.</h2>
+                <p class="text text--center text--xs text--neutral-600 form__text form__text--mt-xs">Выполняется переход в личный кабинет</p>
+            </div>
+        </div>
     </div>
 }

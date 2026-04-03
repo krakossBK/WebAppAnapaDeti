@@ -79,8 +79,8 @@ public partial class UserController
         _sm.CurrentUser = user.Adapt<UserViewModel>();
         _sm.LoginTime = DateTime.Now;
         await Auth(user);
-      
-       
+
+
         return C.TextOk;
     }
 
@@ -92,7 +92,7 @@ public partial class UserController
         _sm.CurrentUser = user.Adapt<UserViewModel>();
         _sm.LoginTime = DateTime.Now;
         await Auth(user);
-       
+
         //// после входа на сайт 
         //// создать список всех Id полученные сообщения со статусом == отправлено sent = 0 
         //List<int> sentMessageIds = [.. _appContext.GetMessagesOfMessageStatus(user.Id, (int)MessageStatuses.sent).Select(m => m.Id)];
@@ -132,13 +132,20 @@ public partial class UserController
         {
             ErrorMessage = "Общая ошибка сайта. Админ уже работает над её устранением."
         };
+
         bool isValid = Guid.TryParse(code, out _);
         if (!isValid)
-            return View(viewModel.ErrorMessage = "Передан неверный токен");
+        {
+            viewModel.ErrorMessage = "Передан неверный токен";
+            return View(viewModel);
+        }
 
         var user = _appContext.GetUserByToken(code);
         if (user == null)
-            return View(viewModel.ErrorMessage = "Не найден пользователь");
+        {
+            viewModel.ErrorMessage = "Не найден пользователь";
+            return View(viewModel);
+        }
 
         if (!user.EmailConfirmed)
         {
@@ -352,7 +359,7 @@ public partial class UserController
                 Message = "IsUserEmailUnique - NO " + userA.Email
             };
 
-            await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+            // await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
             return C.TextError;
         }
 
@@ -377,16 +384,14 @@ public partial class UserController
                 Message = "IsRegistered - " + user.Email
             };
 
-            await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+            // await _logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
             // отправляем письмо на адрес SupportEmail об успешной регистрации new User
             return await SendEmailNewUser(user.Email, user.ContactName, ct)
                     ? C.TextOk
                     : C.TextError;
         }
-
         return C.TextError;
     }
-
 
     public async Task<bool> SendEmailNewUser(string email, string contactName, CancellationToken ct)
     {

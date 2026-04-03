@@ -37,7 +37,7 @@ public abstract class UserCreate
                         Message = "await MediatorSendMail - " + request.User.Email
                     };
 
-                    await logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
+                   // await logSiteHelper.CreateLogSiteViewModel(logSiteViewModel);
                 }
                 return result;
             }
