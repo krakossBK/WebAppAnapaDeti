@@ -146,12 +146,20 @@ public partial class UserController
             viewModel.ErrorMessage = "Не найден пользователь";
             return View(viewModel);
         }
+        else
+        {
+            if(user.EmailConfirmed)
+               { 
+                viewModel.ErrorMessage = "Пользователь уже подтвердил свой адрес электронной почты";
+                return View(viewModel);
+            }
+        }
 
         if (!user.EmailConfirmed)
         {
             _appContext.UpdateUserEmailConfirmed(user.Id, true, true); // запишем в БД данные о событии успешного подтверждения Email адреса и включим подписку на емайл
             _appContext.UpdateUserModerateResult(user.Id, (int)ModerateResults.Accepted); // запишем в БД новый статус у Usera           
-            _appContext.UpdateVerificationCode(user.Id, Guid.NewGuid()); // запишем в БД новый VerificationCode у Usera 
+            //_appContext.UpdateVerificationCode(user.Id, Guid.NewGuid()); // запишем в БД новый VerificationCode у Usera 
         }
 
         /* Запишем в БД данные о событии успешной авторизации через переход по ссылке в письме
