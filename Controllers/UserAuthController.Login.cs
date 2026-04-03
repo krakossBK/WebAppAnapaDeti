@@ -31,7 +31,7 @@ public partial class UserAuthController
             
         var sendTo = dbUser.Email;
 
-        string subscription = $"{_sm.GetCurrentUrl()}/confirm-email?code={verificationCode}";
+        string subscription = $"{_appSettings.WebAddress}/confirm-email?code={verificationCode}";
         var subject = "Повторное подтверждение регистрации";
         var body = "Уважаемый пользователь," + "<br/>" + "<br/>" +
                    "Вам необходимо подтвердить данные Вашего почтового ящика" + "<br/>" + "<br/>" +
@@ -67,7 +67,7 @@ public partial class UserAuthController
             return $"Ошибка отправки почты на  Ваш e-mail - {email}";
             
         string sendTo = dbUser.Email;
-        string subscription = $"{_sm.GetCurrentUrl()}/repassword?token={verificationCode}";
+        string subscription = $"{_appSettings.WebAddress}/repassword?token={verificationCode}";
         string subject = "Восстановление доступа";
         string body = "Уважаемый пользователь," + "<br/>" + "<br/>" +
                       "Для восстановления доступа - перейдите по ссылке - " + "<a href=\'" + subscription +

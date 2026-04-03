@@ -93,6 +93,6 @@ public class SM(IHttpContextAccessor hca, IAppDbContext appContext) : IUserConte
     }
     public string GetCurrentUrl()
     {
-        return _httpContext.Request.Host.Value.ToString(); //.Current.Request.Url.ToString();
+        return _httpContext.Request.Host.Value.ToString();
     }
 }

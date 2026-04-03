@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Net.Mime;
 using WebAppAnapaDeti.AppCode;
 using WebAppAnapaDeti.AppCode.Features.Mail;
@@ -12,18 +13,19 @@ using WebAppAnapaDeti.Models.Entities;
 namespace WebAppAnapaDeti.Controllers;
 
 [AllowAnonymous, EmptyViewBag]
-public partial class UserAuthController(
-    SM sm,
-    IMediator mediator,
-    UserHelper userHelper,
-    ILogger<UserAuthController> logger,
-    IAppDbContext appContext) : Controller
+public partial class UserAuthController(SM sm,
+                                        IMediator mediator,
+                                        UserHelper userHelper,
+                                        ILogger<UserAuthController> logger,
+                                        IAppDbContext appContext,
+                                        IOptions<AppSettings> optionsAppSettings) : Controller
 {
     private readonly SM _sm = sm;
     private readonly IMediator _mediator = mediator;
     private readonly UserHelper _userHelper = userHelper;
     private readonly ILogger _logger = logger;
     private readonly IAppDbContext _appContext = appContext;
+    private readonly AppSettings _appSettings = optionsAppSettings.Value;
 
     #region Проверка нового ЮЗЕРА на уникальность по e-mail
 
