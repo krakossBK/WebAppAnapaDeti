@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebAppAnapaDeti.AppCode;
 using WebAppAnapaDeti.Models;
 
 namespace WebAppAnapaDeti.Controllers
@@ -11,7 +10,7 @@ namespace WebAppAnapaDeti.Controllers
         private readonly ILogger<HomeController> _logger = logger;
 
         public IActionResult Index()
-        { 
+        {
             _logger.LogInformation("Index");
             return View();
         }
@@ -22,7 +21,7 @@ namespace WebAppAnapaDeti.Controllers
         }
         [HttpGet("/politika-konfidentsialnosti")]
         [AllowAnonymous]
-        public IActionResult PolitikaPDN()
+        public IActionResult PolitikaPDn()
         {
             _logger.LogInformation("PolitikaPDN");
             return View();
